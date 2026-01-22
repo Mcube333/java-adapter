@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="AutomationSuite" parallel="tests" thread-count="2">
+    <test name="API Tests">
+        <packages>
+            <package name="apitests"/>
+        </packages>
+    </test>
+
+    <test name="Web Tests">
+        <packages>
+            <package name="webtests"/>
+        </packages>
+    </test>
+</suite>

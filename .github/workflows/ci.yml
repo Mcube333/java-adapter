@@ -1,0 +1,48 @@
+name: Java QA Automation
+
+# Trigger pipeline on push or pull request to main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Set up Java JDK
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # 3. Cache Maven dependencies
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      # 4. Build the project
+      - name: Maven Build
+        run: mvn clean compile
+
+      # 5. Run the TestNG suite
+      - name: Run Tests
+        run: mvn test
+
+      # 6. Archive TestNG reports
+      - name: Archive Test Reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: testng-reports
+          path: target/surefire-reports/
