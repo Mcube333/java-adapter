@@ -32,17 +32,24 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      # 4. Build the project
-      - name: Maven Build
-        run: mvn clean compile
+      # Run Tests
+      - name: Run TestNG Suite
+        run: mvn clean test
 
-      # 5. Run the TestNG suite
-      - name: Run Tests
-        run: mvn test
-
-      # 6. Archive TestNG reports
-      - name: Archive Test Reports
+      # Upload Extent Report
+      - name: Upload Extent Report
+        if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: testng-reports
-          path: target/surefire-reports/
+          name: extent-report
+          path: target/extent-report.html
+
+      # Upload Screenshots (Web Failures)
+      - name: Upload Screenshots
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshots
+          path: target/screenshots/
+
+      
