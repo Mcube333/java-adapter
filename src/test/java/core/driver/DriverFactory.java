@@ -1,6 +1,7 @@
 package core.driver;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -17,6 +18,9 @@ public class DriverFactory {
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
 
-        DriverManager.setDriver(new ChromeDriver(options));
+        WebDriver driver = new ChromeDriver(options);
+
+        // 🔑 Hand over driver to DriverManager
+        DriverManager.setDriver(driver);
     }
 }

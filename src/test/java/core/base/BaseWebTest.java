@@ -1,10 +1,11 @@
-package core;
+package core.base;
 
-import driver.DriverFactory;
+import core.driver.DriverFactory;
+import core.driver.DriverManager;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
-public class BaseWebTest {
+public class BaseWebTest extends BaseTest {
 
     @BeforeMethod
     public void setUp() {
@@ -13,6 +14,6 @@ public class BaseWebTest {
 
     @AfterMethod
     public void tearDown() {
-        DriverFactory.quitDriver();
+        DriverManager.quit();
     }
 }

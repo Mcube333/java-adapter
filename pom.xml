@@ -29,10 +29,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>7.9.0</version>
-			<scope>test</scope>
+			<groupId>com.aventstack</groupId>
+			<artifactId>extentreports</artifactId>
+			<version>5.1.1</version>
 		</dependency>
 
 		<dependency>
@@ -53,7 +52,6 @@
 			<version>7.11.0</version>
 			<scope>test</scope>
 		</dependency>
-
 
 		<dependency>
 			<groupId>io.github.bonigarcia</groupId>

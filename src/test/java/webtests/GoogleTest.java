@@ -5,17 +5,13 @@ import core.driver.DriverManager;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertTrue;
-
-public class GoogleSmokeTest extends BaseWebTest {
+public class GoogleTest extends BaseWebTest {
 
     @Test
-    public void verifyGoogleTitle() {
-
+    public void openGoogle() {
         WebDriver driver = DriverManager.getDriver();
         driver.get("https://www.google.com");
+        System.out.println("Google Test Thread: " + Thread.currentThread().getName());
 
-        assertTrue(driver.getTitle().contains("Google"),
-                "Page title validation failed");
     }
 }

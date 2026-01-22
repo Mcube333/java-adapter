@@ -1,8 +1,9 @@
 package apitests;
 
-import core.BaseApiTest;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
+
+import core.base.BaseApiTest;
 import utils.ApiAssertions;
 
 import static io.restassured.RestAssured.given;
