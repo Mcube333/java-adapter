@@ -1,4 +1,4 @@
-name: Java QA Automation
+name: Java QA Automation Matrix
 
 on:
   push:
@@ -7,8 +7,14 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-and-test:
+  test-matrix:
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chrome, firefox]
+        env: [dev, qa]
 
     steps:
       - name: Checkout code
@@ -20,22 +26,23 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Cache Maven dependencies
+      - name: Cache Maven
         uses: actions/cache@v4
         with:
           path: ~/.m2
           key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
-          restore-keys: maven-
 
-      - name: Run Parallel Tests
-        run: mvn clean test -DsuiteXmlFile=src/test/resources/testng-parallel.xml
+      - name: Run Tests
+        run: |
+          mvn clean test \
+          -Dbrowser=${{ matrix.browser }} \
+          -Denv=${{ matrix.env }}
 
-      - name: Upload Test Output
+      - name: Upload Extent Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Test-Output
+          name: Extent-${{ matrix.browser }}-${{ matrix.env }}
           path: |
             test-output
             extent-report.html
-        continue-on-error: true

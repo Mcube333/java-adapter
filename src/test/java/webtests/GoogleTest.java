@@ -1,9 +1,10 @@
 package webtests;
 
-import core.base.BaseWebTest;
-import core.driver.DriverManager;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
+
+import core.base.BaseWebTest;
+import core.driver.DriverManager;
 
 public class GoogleTest extends BaseWebTest {
 
@@ -12,6 +13,7 @@ public class GoogleTest extends BaseWebTest {
         WebDriver driver = DriverManager.getDriver();
         driver.get("https://www.google.com");
         System.out.println("Google Test Thread: " + Thread.currentThread().getName());
+//        assertTrue(false, "Intentional failure to validate screenshot");
 
     }
 }

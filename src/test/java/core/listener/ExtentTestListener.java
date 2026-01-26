@@ -2,18 +2,20 @@ package core.listener;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
-
-import core.driver.DriverManager;
-
 import core.report.ExtentManager;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.testng.*;
+import org.testng.ITestContext;
+import org.testng.ITestListener;
+import org.testng.ITestResult;
+import core.utils.ScreenshotUtil;
+import com.aventstack.extentreports.MediaEntityBuilder;
 
-import java.io.File;
-import java.nio.file.Files;
+
 
 public class ExtentTestListener implements ITestListener {
+	
+	public static ExtentTest getTest() {
+	    return test.get();
+	}
 
     private static ExtentReports extent = ExtentManager.getInstance();
     private static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
@@ -25,35 +27,30 @@ public class ExtentTestListener implements ITestListener {
 
     @Override
     public void onTestSuccess(ITestResult result) {
-        test.get().pass("Test Passed");
+        test.get().pass("Test passed");
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
-        test.get().fail(result.getThrowable());
 
-        // Screenshot only for Web tests
-        if (DriverManager.getDriver() != null) {
-            try {
-            	File src = ((TakesScreenshot) DriverManager.getDriver())
-                        .getScreenshotAs(OutputType.FILE);
+    	
+        String screenshotPath =
+                ScreenshotUtil.takeScreenshot(result.getMethod().getMethodName());
 
-                File dest = new File("target/screenshots/"
-                        + result.getMethod().getMethodName() + ".png");
-
-                dest.getParentFile().mkdirs();
-                Files.copy(src.toPath(), dest.toPath());
-
-                test.get().addScreenCaptureFromPath(dest.getPath());
-
-            } catch (Exception e) {
-                test.get().warning("Screenshot capture failed");
-            }
+        if (screenshotPath != null) {
+            test.get().fail(result.getThrowable(),
+                    MediaEntityBuilder
+                            .createScreenCaptureFromPath(screenshotPath)
+                            .build());
+        } else {
+            test.get().fail(result.getThrowable());
+            test.get().info("Retrying test if applicable...");
         }
     }
 
+
     @Override
     public void onFinish(ITestContext context) {
-        extent.flush();
+        extent.flush(); // 🔥 THIS CREATES THE FILE
     }
 }

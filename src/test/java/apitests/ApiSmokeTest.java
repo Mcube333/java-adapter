@@ -1,25 +1,26 @@
 package apitests;
 
-import io.restassured.response.Response;
+import static io.restassured.RestAssured.given;
+
 import org.testng.annotations.Test;
 
 import core.base.BaseApiTest;
-import utils.ApiAssertions;
-
-import static io.restassured.RestAssured.given;
+import core.utils.ApiExtentLogger;
+import io.restassured.response.Response;
 
 public class ApiSmokeTest extends BaseApiTest {
 
     @Test
     public void verifyUsersApi() {
 
-        Response response =
-            given()
-                .header("Content-Type", "application/json")
-            .when()
-                .get("/users");
+    	Response response =
+    	        given()
+    	        .when()
+    	        .get("/users?page=2");
 
-        ApiAssertions.assertResponseNotNull(response);
-        ApiAssertions.assertStatusCode(response, 200);
+    	ApiExtentLogger.logRequest("GET", "/users?page=2", null);
+    	ApiExtentLogger.logResponse(response.getStatusCode(), response.asPrettyString());
+
+    	response.then().statusCode(200);
     }
 }
