@@ -5,16 +5,28 @@ import java.util.Properties;
 
 public class ConfigManager {
 
-    private static Properties props = new Properties();
+    private static final Properties props = new Properties();
 
     static {
         try {
+            String env = System.getProperty("env", "").trim();
+            String fileName = env.isEmpty()
+                    ? "config/env.properties"
+                    : "config/env-" + env + ".properties";
+
             InputStream input = ConfigManager.class
-                .getClassLoader()
-                .getResourceAsStream("config/env.properties");
+                    .getClassLoader()
+                    .getResourceAsStream(fileName);
+
+            if (input == null) {
+                throw new RuntimeException("Configuration file not found: " + fileName);
+            }
+
             props.load(input);
+            System.out.println("Loaded configuration: " + fileName);
+
         } catch (Exception e) {
-            throw new RuntimeException("Failed to load env.properties");
+            throw new RuntimeException("Failed to load environment configuration", e);
         }
     }
 
