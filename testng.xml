@@ -1,15 +1,16 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Automation Suite">
 
+
 	<listeners>
-		<listener class-name="core.listener.ExtentTestListener" />
-		<listener class-name="core.utils.RetryAnnotationTransformer" />
+		<listener class-name="tests.listeners.ExtentTestListener" />
+		<listener class-name="tests.utils.RetryAnnotationTransformer" />
 	</listeners>
 
 	<test name="All Tests">
 		<packages>
-			<package name="webtests" />
-			<package name="apitests" />
+			<package name="tests.api" />
+			<package name="tests.web" />
 		</packages>
 	</test>
 
