@@ -1,19 +1,11 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Automation Suite">
+<suite name="Default Suite" parallel="false">
 
-
-	<listeners>
-		<listener class-name="tests.listeners.ExtentTestListener" />
-		<listener class-name="tests.utils.RetryAnnotationTransformer" />
-	</listeners>
-
-	<test name="All Tests">
-		<packages>
-			<package name="tests.api" />
-			<package name="tests.web" />
-		</packages>
-	</test>
+    <test name="All Tests">
+        <packages>
+            <package name="tests.api"/>
+            <package name="tests.web"/>
+        </packages>
+    </test>
 
 </suite>
-
-

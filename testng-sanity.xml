@@ -1,13 +1,17 @@
-<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
-<suite name="Sanity Suite">
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Sanity Suite" parallel="tests" thread-count="4">
+
     <test name="Sanity Tests">
         <groups>
             <run>
                 <include name="sanity"/>
             </run>
         </groups>
+
         <packages>
-            <package name="tests.*"/>
+            <package name="tests.api"/>
+            <package name="tests.web"/>
         </packages>
     </test>
+
 </suite>

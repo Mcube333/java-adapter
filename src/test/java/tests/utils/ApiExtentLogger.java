@@ -1,25 +1,22 @@
 package tests.utils;
 
-import com.aventstack.extentreports.ExtentTest;
+import framework.reporting.ExtentTestManager;
 
-import tests.listeners.ExtentTestListener;
+public final class ApiExtentLogger {
 
-public class ApiExtentLogger {
+    private ApiExtentLogger() {}
 
-    public static void logRequest(String method, String url, String body) {
-        ExtentTest test = ExtentTestListener.getTest();
-        test.info("REQUEST");
-        test.info("Method: " + method);
-        test.info("URL: " + url);
-        if (body != null) {
-            test.info("Body: " + body);
+    public static void logRequest(String method, String endpoint, String body) {
+        if (ExtentTestManager.getTest() != null) {
+            ExtentTestManager.getTest()
+                .info(method + " " + endpoint);
         }
     }
 
-    public static void logResponse(int statusCode, String response) {
-        ExtentTest test = ExtentTestListener.getTest();
-        test.info("RESPONSE");
-        test.info("Status Code: " + statusCode);
-        test.info("Body: " + response);
+    public static void logResponse(int status, String response) {
+        if (ExtentTestManager.getTest() != null) {
+            ExtentTestManager.getTest()
+                .info("Status: " + status + "\n" + response);
+        }
     }
 }
