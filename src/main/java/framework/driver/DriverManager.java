@@ -13,6 +13,11 @@ public final class DriverManager {
     }
 
     public static WebDriver getDriver() {
+        if (driverThread.get() == null) {
+            DriverFactory.initDriver(
+                System.getProperty("browser", "chrome")
+            );
+        }
         return driverThread.get();
     }
 

@@ -8,7 +8,7 @@ import tests.base.BaseWebTest;
 
 public class GoogleTest extends BaseWebTest {
 
-    @Test
+	@Test(groups = {"smoke", "regression"})
     public void openGoogle() {
         WebDriver driver = DriverManager.getDriver();
         driver.get("https://www.google.com");
