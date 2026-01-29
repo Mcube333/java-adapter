@@ -32,11 +32,61 @@ jobs:
           path: ~/.m2
           key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
 
-      - name: Run Tests
+      - name: Install browser dependencies and utilities
         run: |
+          sudo apt-get update
+          sudo apt-get install -y wget gnupg2 unzip curl ca-certificates fonts-liberation \
+                                  libnss3 libgconf-2-4 libxi6 libgtk-3-0 libxss1 libasound2
+
+      - name: Install Google Chrome
+        if: matrix.browser == 'chrome'
+        run: |
+          wget -q -O /tmp/google-chrome-stable_current_amd64.deb \
+            https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i /tmp/google-chrome-stable_current_amd64.deb || sudo apt-get -f install -y
+          # expose chrome binary to other steps
+          echo "CHROME_BIN=/usr/bin/google-chrome-stable" >> $GITHUB_ENV
+
+      - name: Install matching ChromeDriver
+        if: matrix.browser == 'chrome'
+        run: |
+          # Get chrome major version
+          CHROME_MAJOR=$(google-chrome --version | grep -oP '\d+' | head -1)
+          echo "Detected Chrome major version: $CHROME_MAJOR"
+          # Query chromedriver storage for the matching chromedriver release
+          CHROMEDRIVER_VERSION=$(curl -sS "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_MAJOR}")
+          if [ -z "$CHROMEDRIVER_VERSION" ]; then
+            echo "Falling back to LATEST_RELEASE"
+            CHROMEDRIVER_VERSION=$(curl -sS "https://chromedriver.storage.googleapis.com/LATEST_RELEASE")
+          fi
+          echo "Installing chromedriver version: $CHROMEDRIVER_VERSION"
+          wget -q -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
+          unzip -q /tmp/chromedriver.zip -d /tmp
+          sudo mv /tmp/chromedriver /usr/local/bin/chromedriver
+          sudo chmod +x /usr/local/bin/chromedriver
+          # ensure chromedriver is on PATH
+          sudo ln -sf /usr/local/bin/chromedriver /usr/bin/chromedriver
+          chromedriver --version || true
+
+      - name: Install Firefox + geckodriver
+        if: matrix.browser == 'firefox'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y firefox firefox-geckodriver
+          # expose geckodriver path (optional)
+          echo "GECKO_DRIVER=/usr/bin/geckodriver" >> $GITHUB_ENV
+          firefox --version || true
+          geckodriver --version || true
+
+      - name: Run Tests
+        env:
+          BROWSER: ${{ matrix.browser }}
+          ENV: ${{ matrix.env }}
+        run: |
+          # Fail fast on error (maven will return non-zero on test failures)
           mvn clean test \
-          -Dbrowser=${{ matrix.browser }} \
-          -Denv=${{ matrix.env }}
+            -Dbrowser=${{ matrix.browser }} \
+            -Denv=${{ matrix.env }}
 
       - name: Upload Test Reports
         if: always()
