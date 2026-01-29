@@ -6,6 +6,11 @@
 	<artifactId>java-adapter</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
+	<properties>
+		<browser>chrome</browser>
+		<env>qa</env>
+	</properties>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -16,10 +21,19 @@
 					<suiteXmlFiles>
 						<suiteXmlFile>testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
+
+					<systemPropertyVariables>
+						<browser>${browser}</browser>
+						<env>${env}</env>
+					</systemPropertyVariables>
+
+					<!-- Recommended for TestNG + parallel -->
+					<testFailureIgnore>false</testFailureIgnore>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+
 
 	<dependencies>
 		<dependency>

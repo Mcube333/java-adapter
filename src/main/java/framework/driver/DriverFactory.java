@@ -8,10 +8,15 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class DriverFactory {
 
-    public static void initDriver(String browser) {
-        WebDriver driver = createDriver(browser);
-        DriverManager.setDriver(driver);
-    }
+	public static void initDriver(String browser) {
+	    if (browser == null || browser.startsWith("${")) {
+	        browser = "chrome";
+	    }
+
+	    WebDriver driver = createDriver(browser.toLowerCase());
+	    DriverManager.setDriver(driver);
+	}
+
 
     private static WebDriver createDriver(String browser) {
         if (browser == null) {

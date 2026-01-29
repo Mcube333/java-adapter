@@ -6,9 +6,8 @@ import org.testng.annotations.BeforeClass;
 
 public class BaseApiTest extends BaseTest {
 
-    @BeforeClass
-    public void setup() {
-        RestAssured.baseURI = ApiConfig.getBaseUrl();
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-    }
+	@BeforeClass
+	public void setup() {
+	    RestAssured.baseURI = ApiConfig.getBaseUrl();
+	}
 }

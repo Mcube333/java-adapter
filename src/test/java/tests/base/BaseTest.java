@@ -9,10 +9,10 @@ import framework.driver.DriverManager;
 
 public class BaseTest {
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     public void setUp() {
         String browser = System.getProperty("browser");
-        if (browser == null) {
+        if (browser == null || browser.startsWith("${")) {
             browser = ConfigManager.get("browser");
         }
         DriverFactory.initDriver(browser);
@@ -26,3 +26,4 @@ public class BaseTest {
         }
     }
 }
+
