@@ -1,22 +1,37 @@
 package framework.driver;
 
+import framework.config.ConfigManager;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class DriverFactory {
 
-    public static void initDriver() {
+    public static void initDriver(String browser) {
+        WebDriver driver = createDriver(browser);
+        DriverManager.setDriver(driver);
+    }
 
-        WebDriverManager.chromedriver().setup();
+    private static WebDriver createDriver(String browser) {
+        if (browser == null) {
+            browser = ConfigManager.get("browser");
+        }
 
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
-        options.addArguments("--disable-gpu");
-        options.addArguments("--window-size=1920,1080");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
+        switch (browser.toLowerCase()) {
+            case "chrome":
+                WebDriverManager.chromedriver().setup();
+                return new ChromeDriver();
 
-        DriverManager.setDriver(new ChromeDriver(options));
+            case "firefox":
+                WebDriverManager.firefoxdriver().setup();
+                return new FirefoxDriver();
+
+            default:
+                throw new IllegalArgumentException(
+                    "Unsupported browser: " + browser
+                );
+        }
     }
 }
+

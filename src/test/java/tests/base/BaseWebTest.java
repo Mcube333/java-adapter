@@ -3,18 +3,26 @@ package tests.base;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
+import framework.config.ConfigManager;
 import framework.driver.DriverFactory;
 import framework.driver.DriverManager;
 
 public class BaseWebTest extends BaseTest {
 
-    @BeforeMethod
+	@BeforeMethod
     public void setUp() {
-        DriverFactory.initDriver();
+        String browser = System.getProperty("browser");
+        if (browser == null) {
+            browser = ConfigManager.get("browser");
+        }
+        DriverFactory.initDriver(browser);
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     public void tearDown() {
-        DriverManager.quit();
+        if (DriverManager.getDriver() != null) {
+            DriverManager.getDriver().quit();
+            DriverManager.unload();
+        }
     }
 }
