@@ -1,42 +1,36 @@
 package framework.driver;
 
-import framework.config.ConfigManager;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 
-public class DriverFactory {
+import io.github.bonigarcia.wdm.WebDriverManager;
 
-	public static void initDriver(String browser) {
-	    if (browser == null || browser.startsWith("${")) {
-	        browser = "chrome";
-	    }
+public final class DriverFactory {
 
-	    WebDriver driver = createDriver(browser.toLowerCase());
-	    DriverManager.setDriver(driver);
-	}
+    private DriverFactory() {}
 
+    public static void initDriver(String browser) {
+        BrowserType browserType = BrowserType.from(browser);
+        WebDriver driver = createDriver(browserType);
+        DriverManager.setDriver(driver);
+    }
 
-    private static WebDriver createDriver(String browser) {
-        if (browser == null) {
-            browser = ConfigManager.get("browser");
-        }
-
-        switch (browser.toLowerCase()) {
-            case "chrome":
-                WebDriverManager.chromedriver().setup();
-                return new ChromeDriver();
-
-            case "firefox":
+    private static WebDriver createDriver(BrowserType browserType) {
+        switch (browserType) {
+            case FIREFOX:
                 WebDriverManager.firefoxdriver().setup();
                 return new FirefoxDriver();
 
+            case EDGE:
+                WebDriverManager.edgedriver().setup();
+                return new EdgeDriver();
+
+            case CHROME:
             default:
-                throw new IllegalArgumentException(
-                    "Unsupported browser: " + browser
-                );
+                WebDriverManager.chromedriver().setup();
+                return new ChromeDriver();
         }
     }
 }
-
