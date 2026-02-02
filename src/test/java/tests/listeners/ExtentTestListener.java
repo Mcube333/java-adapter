@@ -11,14 +11,19 @@ import framework.reporting.ExtentTestManager;
 
 public class ExtentTestListener implements ITestListener {
 
-    @Override
-    public void onTestStart(ITestResult result) {
-        ExtentTest test =
-                ExtentManager.getExtent()
-                        .createTest(result.getMethod().getMethodName());
+	@Override
+	public void onTestStart(ITestResult result) {
+	    ExtentTest test =
+	        ExtentManager.getExtent()
+	            .createTest(result.getMethod().getMethodName());
 
-        ExtentTestManager.setTest(test);
-    }
+	    for (String group : result.getMethod().getGroups()) {
+	        test.assignCategory(group);
+	    }
+
+	    ExtentTestManager.setTest(test);
+	}
+
 
     @Override
     public void onTestSuccess(ITestResult result) {

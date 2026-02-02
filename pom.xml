@@ -13,27 +13,32 @@
 	</properties>
 
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.2.5</version>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.2.5</version>
 
-				<configuration>
-					<suiteXmlFiles>
-						<suiteXmlFile>${suiteXml}</suiteXmlFile>
-					</suiteXmlFiles>
+            <configuration>
+                <!-- Run via TestNG suite XML -->
+                <suiteXmlFiles>
+                    <suiteXmlFile>${suiteXml}</suiteXmlFile>
+                </suiteXmlFiles>
 
-					<systemPropertyVariables>
-						<browser>${browser}</browser>
-						<env>${env}</env>
-					</systemPropertyVariables>
+                <!-- Enable TestNG groups -->
+                <groups>${groups}</groups>
 
-					<testFailureIgnore>false</testFailureIgnore>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+                <!-- System properties -->
+                <systemPropertyVariables>
+                    <browser>${browser}</browser>
+                    <env>${env}</env>
+                </systemPropertyVariables>
+
+                <testFailureIgnore>false</testFailureIgnore>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
 
 
 	<dependencies>

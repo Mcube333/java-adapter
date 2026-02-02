@@ -10,7 +10,7 @@ import tests.utils.ApiExtentLogger;
 
 public class ApiSmokeTest extends BaseApiTest {
 
-	@Test(groups = {"sanity", "regression"})
+	@Test(groups = {"api", "sanity", "regression"})
     public void verifyUsersApi() {
 
     	Response response =
