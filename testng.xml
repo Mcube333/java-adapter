@@ -1,5 +1,6 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="All Tests Suite">
+
 	<listeners>
 		<listener class-name="tests.listeners.ExtentTestListener" />
 		<listener class-name="tests.utils.RetryAnnotationTransformer" />
