@@ -1,14 +1,14 @@
 package tests.base;
 
-import framework.config.ApiConfig;
-import io.restassured.RestAssured;
 import org.testng.annotations.BeforeClass;
 
-public abstract class BaseApiTest extends BaseTest {
+import io.restassured.RestAssured;
+import framework.config.ConfigManager;
+
+public class BaseApiTest {
 
     @BeforeClass(alwaysRun = true)
     public void setupApi() {
-        RestAssured.baseURI = ApiConfig.getBaseUrl();
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+        RestAssured.baseURI = ConfigManager.get("apiBaseUrl");
     }
 }
